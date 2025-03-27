@@ -4,16 +4,21 @@ contatos = {}
 favoritos = {}
 
 
-def salvar_inventario(inventario, teste='inventario.json'):
+def salvar_inventario(contatos, teste='inventario.json'):
     with open(teste, 'w', encoding='utf-8') as f:
-        json.dump(inventario, f, indent=4, ensure_ascii=False)
-    print('inventario salvo com sucesso.')
-
-def carregar_teste(teste='inventario.json'):
-    pass
-
-def adicionar_contato(): #1
+        json.dump(contatos, f, indent=4, ensure_ascii=False)
+def carregar_inventario(arquivo="inventario.json"):
+    try:
+        with open(arquivo, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("Arquivo não encontrado. Criando um inventário vazio.")
+        return {}
+    except json.JSONDecodeError:
+        print("Erro ao ler o arquivo: formato JSON inválido. Criando um inventário vazio.")
+        return {}
     
+def adicionar_contato(): #1
     nome = input("Adicione o nome do contato: ")
     try:
         telefone = int(input("Adicione o telefone do contato: "))
@@ -93,6 +98,7 @@ def favoritar():
 def list_fav():
     print("Lista de favoritos:\n",favoritos)
     
+    
 while (escolha != 8):
 
     print("AGENDA DE CONTATOS\n1. Adicionar contato\n2. Listar contatos\n3. Buscar contato\n4. Atualizar contato\n5. Remover contato")
@@ -122,7 +128,7 @@ while (escolha != 8):
         
     elif escolha == '8':
         print("Programa encerrado.")
-        salvar_inventario()
+        salvar_inventario(contatos)
         break
     else:
         print('valor inválido')
